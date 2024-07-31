@@ -1,0 +1,11 @@
+server {
+  listen ${PORT};
+  port_in_redirect off;
+
+  root ${NGINX_DOCUMENT_ROOT};
+  index index.html;
+
+  location / {
+    try_files $uri $uri/ =404;
+  }
+}
