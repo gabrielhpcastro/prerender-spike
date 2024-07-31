@@ -1,0 +1,17 @@
+services:
+  application:
+    build: application
+    ports:
+      - '8080:8080'
+    networks:
+      - default
+  server:
+    build: server
+    platform: linux/amd64
+    ports:
+      - '3000:3000'
+    networks:
+      - default
+networks:
+  default:
+    driver: bridge

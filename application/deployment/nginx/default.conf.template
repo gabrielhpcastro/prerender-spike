@@ -6,6 +6,27 @@ server {
   index index.html;
 
   location / {
-    try_files $uri $uri/ =404;
+    try_files $uri @prerender;
+  }
+
+  location @prerender {
+    set $prerender 0;
+    if ($args ~ "me_is_bot") {
+      set $prerender 1;
+    }
+    if ($http_user_agent ~ "Prerender") {
+      set $prerender 0;
+    }
+    if ($uri ~* "\.(js|css|xml|less|png|jpg|jpeg|gif|pdf|doc|txt|ico|rss|zip|mp3|rar|exe|wmv|doc|avi|ppt|mpg|mpeg|tif|wav|mov|psd|ai|xls|mp4|m4a|swf|dat|dmg|iso|flv|m4v|torrent|ttf|woff|svg|eot)") {
+      set $prerender 0;
+    }
+
+    if ($prerender = 1) {
+      rewrite .* /http://application:8080$request_uri? break;
+      proxy_pass http://server:3000;
+    }
+    if ($prerender = 0) {
+      rewrite .* /index.html;
+    }
   }
 }
