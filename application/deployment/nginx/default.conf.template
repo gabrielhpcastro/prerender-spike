@@ -11,6 +11,9 @@ server {
 
   location @prerender {
     set $prerender 0;
+    if ($http_user_agent ~* "googlebot|bingbot|yandex|baiduspider|twitterbot|facebookexternalhit|rogerbot|linkedinbot|embedly|quora link preview|showyoubot|outbrain|pinterest\/0\.|pinterestbot|slackbot|vkShare|W3C_Validator|whatsapp") {
+      set $prerender 1;
+    }
     if ($args ~ "me_is_bot") {
       set $prerender 1;
     }
@@ -21,9 +24,15 @@ server {
       set $prerender 0;
     }
 
+    #resolve using Google's DNS server to force DNS resolution and prevent caching of IPs
+    resolver 127.0.0.11; # Local docker resolver, in production should be 8.8.8.8
+
     if ($prerender = 1) {
-      rewrite .* /http://application:8080$request_uri? break;
-      proxy_pass http://server:3000;
+      set $application_url "http://application:8080";
+      set $prerender_url "http://server:3000";
+
+      rewrite .* /$application_url$request_uri? break;
+      proxy_pass $prerender_url;
     }
     if ($prerender = 0) {
       rewrite .* /index.html;
