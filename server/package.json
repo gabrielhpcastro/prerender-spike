@@ -5,9 +5,15 @@
   "license": "MIT",
   "entry": "src/index.js",
   "scripts": {
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
   },
   "dependencies": {
-    "prerender": "^5.21.5"
+    "prerender": "^5.21.5",
+    "prerender-memory-cache": "^1.0.2",
+    "redis": "^4.7.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
   }
 }
