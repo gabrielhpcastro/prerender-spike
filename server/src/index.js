@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const prerender = require('prerender');
 // const memCache = require('prerender-memory-cache');
 const redisCache = require('./plugins/redisCache');
