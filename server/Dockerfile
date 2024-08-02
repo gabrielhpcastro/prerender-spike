@@ -1,4 +1,7 @@
-FROM node:latest
+FROM node:20
+
+ENV REDIS_URL=
+ENV REDIS_EXPIRATION_SECONDS=60
 
 # Install dependencies for Chrome
 RUN apt-get update && apt-get install -y \

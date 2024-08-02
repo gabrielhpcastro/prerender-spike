@@ -6,6 +6,17 @@ server {
   index index.html;
 
   location / {
+    set $default_file_url $uri/;
+    try_files $uri @prerender;
+  }
+
+  location /bp {
+    set $default_file_url /index.html;
+    try_files $uri @prerender;
+  }
+
+  location /gp {
+    set $default_file_url /index.html;
     try_files $uri @prerender;
   }
 
@@ -34,8 +45,9 @@ server {
       rewrite .* /$application_url$request_uri? break;
       proxy_pass $prerender_url;
     }
+
     if ($prerender = 0) {
-      rewrite .* /index.html;
+      rewrite .* $default_file_url break;
     }
   }
 }

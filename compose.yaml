@@ -8,6 +8,9 @@ services:
   server:
     build: server
     platform: linux/amd64
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - REDIS_EXPIRATION_SECONDS=60
     ports:
       - '3000:3000'
     networks:
